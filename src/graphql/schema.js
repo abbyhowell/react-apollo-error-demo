@@ -14,6 +14,40 @@ const PersonType = new GraphQLObjectType({
   },
 });
 
+
+
+const subscriptionData = [
+  { id: 1, name: 'Weekly CSA Delivery', price: 100, accountId: 'myAccount' },
+  { id: 2, name: 'Weekly CSA Add-on: Apples', price: 10, accountId: 'myAccount' },
+];
+
+const accountData = {
+  id: 'myAccount',
+  name: 'Example Account',
+  subscriptions: subscriptionData,
+}
+
+const SubscriptionType = new GraphQLObjectType({
+  name: 'Subscription',
+  fields: {
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    price: { type: GraphQLString },
+  },
+});
+
+const AccountType = new GraphQLObjectType({
+  name: 'Account',
+  fields: {
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    subscriptions: {
+      type: new GraphQLList(SubscriptionType),
+      resolve: () => subscriptionData,
+    },
+  },
+});
+
 const peopleData = [
   { id: 1, name: 'John Smith' },
   { id: 2, name: 'Sara Smith' },
@@ -27,15 +61,40 @@ const QueryType = new GraphQLObjectType({
       type: new GraphQLList(PersonType),
       resolve: () => peopleData,
     },
+    account: {
+      type: AccountType,
+      resolve: () => accountData,
+    },
+    subscriptions: {
+      type: new GraphQLList(SubscriptionType),
+      resolve: () => subscriptionData,
+    }
   },
 });
 
 const MutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
+    addSubscription: {
+      type: SubscriptionType,
+      args: {
+        name: { type: GraphQLString },
+        price: { type: GraphQLString }
+      },
+      resolve: function (_, { name, price }) {
+        const subscription = {
+          id: subscriptionData[subscriptionData.length - 1].id + 1,
+          name,
+          price
+        };
+
+        subscriptionData.push(subscription);
+        return subscription
+      }
+    },
     addPerson: {
       type: PersonType,
-      args: { 
+      args: {
         name: { type: GraphQLString },
       },
       resolve: function (_, { name }) {
