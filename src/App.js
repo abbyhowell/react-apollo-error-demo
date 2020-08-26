@@ -55,8 +55,26 @@ export default function App() {
     <main>
       <h1>Apollo Client Issue Reproduction</h1>
       <p>
-        When you have a business object called a Subscription, Apollo Client doesn't return your data, but also doesn't return an error or warning message
+        When you have a business object called a Subscription, Apollo Client returns a list of the first subscription repeated multiple times.<br />
+        It also doesn't return an error or warning message.
       </p>
+      <p>
+        The list of subscriptions that should be showing is:
+        <pre>
+          <code>
+            id: 1, name: 'Weekly CSA Delivery', price: 100
+          </code>
+        </pre>
+        <pre>
+          <code>
+            id: 2, name: 'Weekly CSA Add-on: Apples', price: 10
+          </code>
+        </pre>
+      </p>
+      <p>
+       Instead, <code>useQuery</code> returns the first subscription twice.
+      </p>
+
       <div className="add-subscription">
         <label htmlFor="name">Name</label>
         <input

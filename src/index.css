@@ -7,18 +7,18 @@ h1 {
   margin-top: 0;
 }
 
-.add-person {
+.add-subscription {
   display: flex;
   flex-direction: column;
   width: 16em;
 }
 
-.add-person input {
+.add-subscription input {
   height: 2.25em;
   margin: 1em 0;
 }
 
-.add-person button {
+.add-subscription button {
   height: 2.25em;
   cursor: pointer;
 }
